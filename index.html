@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arya Bhangy Builders — Design System v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+@font-face {
+  font-family: 'Kinta';
+  src: url('Kinta.otf') format('opentype'),
+       url('Kinta.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* TYPOGRAPHY TOKENS */
+.type-combo{margin-bottom:56px;padding-bottom:56px;border-bottom:1px solid var(--border)}
+.type-combo-heading{font-family:'Kinta',serif;font-size:40px;font-weight:400;color:var(--text-heading);line-height:1.15;letter-spacing:-.01em;margin-bottom:20px}
+.type-combo-para{font-family:'Jost',sans-serif;font-size:15px;font-weight:400;color:var(--text-body);line-height:1.8;max-width:600px}
+.type-combo-note{display:flex;gap:24px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+.type-combo-note-item{font-size:11px;color:var(--text-muted)}
+.type-combo-note-item strong{display:block;font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-heading);margin-bottom:3px}
+
+.type-scale-row{display:flex;align-items:baseline;gap:32px;padding:24px 0;border-bottom:1px solid var(--border)}
+.type-scale-row:last-child{border-bottom:none}
+.type-scale-meta{flex-shrink:0;width:180px}
+.type-scale-token{font-size:11px;font-weight:500;font-family:'Courier New',monospace;color:var(--crimson-700);margin-bottom:4px}
+.type-scale-specs{font-size:10px;color:var(--text-muted);line-height:1.7}
+.type-scale-sample{color:var(--text-heading);font-style:normal}
+
+:root {
+  --crimson-950:#2E0000; --crimson-900:#420000; --crimson-800:#560000;
+  --crimson-700:#680000; --crimson-600:#7C1414; --crimson-500:#962626;
+  --crimson-200:#E7C9C9; --crimson-100:#F2DEDE; --crimson-50:#FAF0F0;
+  --ink-900:#141A29; --ink-800:#1C2438; --ink-700:#283450;
+  --ink-500:#45557A; --ink-100:#E2E6EF;
+  --paper:#FBFAF7; --paper-2:#F3F0EA; --surface:#FFFFFF;
+  --surface-sunk:#F7F5F1; --border:#E8E2D8; --border-strong:#D6CEC1;
+  --text-heading:#1A1512; --text-body:#4C453E; --text-muted:#8A8076;
+  --text-on-dark:#F6F2EC; --text-on-dark-muted:#C9BFB4;
+  --status-ongoing-fg:#8A5A12; --status-ongoing-bg:#F6ECD7; --status-ongoing-bd:#E7D3A8;
+  --status-done-fg:#2C5E47;   --status-done-bg:#E5EFE9;   --status-done-bd:#C2DACD;
+  --status-sold-fg:#841414;   --status-sold-bg:#F2DEDE;   --status-sold-bd:#E7C9C9;
+  --status-premium-fg:#1C2438; --status-premium-bg:#E2E6EF; --status-premium-bd:#C8CFDD;
+  --shadow-xs:0 1px 2px rgba(26,21,18,.05);
+  --shadow-sm:0 2px 6px rgba(26,21,18,.06);
+  --shadow-md:0 6px 18px rgba(26,21,18,.07);
+  --shadow-lg:0 16px 40px rgba(26,21,18,.10);
+  --shadow-xl:0 28px 64px rgba(26,21,18,.14);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--text-body);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:var(--crimson-950);height:56px;display:flex;align-items:center;padding:0 48px;justify-content:space-between;border-bottom:1px solid var(--crimson-900)}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--text-on-dark);letter-spacing:.06em;text-transform:uppercase}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-size:11px;font-weight:400;color:var(--text-on-dark-muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color 180ms}
+.nav-links a:hover{color:var(--text-on-dark)}
+
+/* LAYOUT */
+.wrap{max-width:1100px;margin:0 auto;padding:0 48px 120px}
+
+/* HERO */
+.hero{padding:72px 0 60px;border-bottom:1px solid var(--border)}
+.eyebrow{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--crimson-700);margin-bottom:20px}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:300;color:var(--text-heading);line-height:1.05;letter-spacing:-.02em;margin-bottom:14px}
+.hero-sub{font-size:15px;color:var(--text-muted);max-width:500px;line-height:1.75}
+.hero-meta{display:flex;gap:40px;margin-top:40px;flex-wrap:wrap}
+.hero-meta-item label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:3px}
+.hero-meta-item span{font-size:13px;font-weight:500;color:var(--text-heading)}
+
+/* SECTIONS */
+.section{padding:60px 0 0}
+.section-hd{display:flex;align-items:baseline;gap:14px;margin-bottom:36px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.section-num{font-size:10px;font-weight:500;color:var(--crimson-700);letter-spacing:.12em;text-transform:uppercase;flex-shrink:0}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--text-heading);letter-spacing:-.01em}
+.section-desc{font-size:12px;color:var(--text-muted);margin-left:auto;text-align:right;line-height:1.5;max-width:280px}
+.divider{border:none;border-top:1px solid var(--border);margin:60px 0 0}
+
+/* GROUP LABEL */
+.group-label{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px}
+
+/* COLOR SWATCHES */
+.color-group{margin-bottom:44px}
+.swatch-row{display:flex;gap:10px;flex-wrap:wrap}
+.swatch{width:96px}
+.swatch-chip{height:68px;border-radius:6px;margin-bottom:7px;border:1px solid rgba(0,0,0,.07)}
+.swatch-name{font-size:11px;font-weight:500;color:var(--text-heading);margin-bottom:1px}
+.swatch-hex{font-size:10px;font-family:'Courier New',monospace;color:var(--text-muted);letter-spacing:.03em}
+.swatch-desc{font-size:10px;color:var(--text-muted);margin-top:2px;line-height:1.4}
+.swatch-star .swatch-name{color:var(--crimson-700)}
+.swatch-star-ink .swatch-name{color:var(--ink-800)}
+
+/* STATUS GRID */
+.status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.status-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px}
+.status-card-label{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px}
+.badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:500;border:1px solid;letter-spacing:.02em}
+.badge-dot{width:5px;height:5px;border-radius:50%;margin-right:5px;flex-shrink:0}
+.badge-ongoing{color:var(--status-ongoing-fg);background:var(--status-ongoing-bg);border-color:var(--status-ongoing-bd)}
+.badge-done{color:var(--status-done-fg);background:var(--status-done-bg);border-color:var(--status-done-bd)}
+.badge-sold{color:var(--status-sold-fg);background:var(--status-sold-bg);border-color:var(--status-sold-bd)}
+.badge-premium{color:var(--status-premium-fg);background:var(--status-premium-bg);border-color:var(--status-premium-bd)}
+.status-tokens{margin-top:10px;font-size:10px;font-family:'Courier New',monospace;color:var(--text-muted);line-height:1.9}
+
+/* SPACING */
+.spacing-list{display:flex;flex-direction:column;gap:9px;margin-bottom:48px}
+.spacing-item{display:flex;align-items:center;gap:16px}
+.spacing-token{font-size:11px;font-family:'Courier New',monospace;color:var(--text-muted);width:96px;flex-shrink:0}
+.spacing-bar{background:var(--crimson-200);border-right:2px solid var(--crimson-700);height:18px;border-radius:2px;transition:width .2s}
+.spacing-val{font-size:11px;color:var(--text-muted);flex-shrink:0;width:36px}
+
+/* RADIUS */
+.radius-row{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:48px;align-items:flex-end}
+.radius-item{display:flex;flex-direction:column;align-items:center;gap:8px}
+.radius-box{background:var(--crimson-100);border:1.5px solid var(--crimson-200)}
+.radius-token{font-size:10px;font-weight:500;color:var(--text-heading);text-align:center}
+.radius-val{font-size:10px;color:var(--text-muted);font-family:'Courier New',monospace;text-align:center}
+
+/* SHADOWS */
+.shadow-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:48px}
+.shadow-card{background:var(--surface);border-radius:8px;padding:22px 18px;width:150px}
+.shadow-token{font-size:11px;font-weight:500;color:var(--text-heading);margin-bottom:3px}
+.shadow-use{font-size:10px;color:var(--text-muted)}
+
+/* MOTION */
+.motion-grid{display:grid;grid-template-columns:1fr 2fr;gap:14px;margin-bottom:48px}
+.motion-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px}
+.motion-label{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px}
+.mono{font-size:12px;font-family:'Courier New',monospace;color:var(--text-heading);line-height:2}
+
+/* COMPONENT GRID */
+.component-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:48px}
+.component-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px}
+.component-label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:18px}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border-radius:4px;cursor:pointer;transition:all 180ms cubic-bezier(.22,.61,.36,1);text-decoration:none;letter-spacing:.01em;line-height:1}
+.btn-primary{background:var(--crimson-700);color:var(--text-on-dark);border:1px solid var(--crimson-700)}
+.btn-primary:hover{background:var(--crimson-600);border-color:var(--crimson-600)}
+.btn-secondary{background:transparent;color:var(--ink-800);border:1px solid var(--ink-800)}
+.btn-secondary:hover{background:var(--ink-100)}
+.btn-ghost{background:transparent;color:var(--text-body);border:1px solid var(--border-strong)}
+.btn-ghost:hover{background:var(--paper-2)}
+.btn-outline{background:transparent;color:var(--crimson-700);border:1px solid var(--crimson-200)}
+.btn-outline:hover{background:var(--crimson-50);border-color:var(--crimson-500)}
+.btn-sm{padding:7px 14px;font-size:12px}
+
+/* INPUTS */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.field-label{font-size:12px;font-weight:500;color:var(--text-heading);letter-spacing:.01em}
+.input{width:100%;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-body);background:var(--surface);border:1px solid var(--border-strong);border-radius:4px;outline:none;transition:border-color 160ms,box-shadow 160ms}
+.input::placeholder{color:var(--text-muted)}
+.input:focus{border-color:var(--crimson-700);box-shadow:0 0 0 3px rgba(104,0,0,.10)}
+.field-hint{font-size:11px;color:var(--text-muted)}
+
+/* PROPERTY CARD */
+.property-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-md)}
+.property-thumb{height:148px;background:var(--crimson-950);position:relative;display:flex;align-items:flex-start;padding:12px;border-bottom:1px solid var(--crimson-900)}
+.property-thumb-inner{width:100%;height:100%;position:absolute;inset:0;opacity:.25;background:repeating-linear-gradient(45deg,var(--crimson-800) 0,var(--crimson-800) 1px,transparent 0,transparent 50%) 0 0/12px 12px}
+.property-badge{position:relative;z-index:1}
+.property-body{padding:16px 18px 18px}
+.property-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;color:var(--text-heading);margin-bottom:3px}
+.property-loc{font-size:12px;color:var(--text-muted);margin-bottom:13px;display:flex;align-items:center;gap:5px}
+.property-loc::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--crimson-200);border:1.5px solid var(--crimson-500);flex-shrink:0}
+.property-meta{display:flex;gap:18px;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:13px}
+.property-meta-item label{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:2px}
+.property-meta-item span{font-size:13px;font-weight:500;color:var(--text-heading)}
+.property-footer{display:flex;align-items:center;justify-content:space-between}
+.property-price{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--crimson-700)}
+.property-price sub{font-size:11px;font-family:'DM Sans',sans-serif;color:var(--text-muted);font-weight:400;vertical-align:baseline}
+
+/* STATUS IN CONTEXT */
+.project-row{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;background:var(--paper-2);border-radius:6px;margin-bottom:8px}
+.project-row-name{font-size:13px;color:var(--text-heading);font-weight:500}
+
+/* TYPOGRAPHY PLACEHOLDER */
+.type-placeholder{background:var(--paper-2);border:1.5px dashed var(--border-strong);border-radius:8px;padding:48px 40px;text-align:center;margin-bottom:48px}
+.type-placeholder h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text-heading);margin-bottom:8px;font-weight:400}
+.type-placeholder p{font-size:13px;color:var(--text-muted);max-width:440px;margin:0 auto;line-height:1.7}
+.type-tag{display:inline-block;margin-top:20px;padding:5px 14px;background:var(--crimson-50);border:1px solid var(--crimson-200);border-radius:999px;font-size:11px;color:var(--crimson-700);font-weight:500;letter-spacing:.04em}
+
+/* FOOTER */
+.footer{margin-top:80px;padding:28px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--text-muted)}
+.footer-meta{font-size:11px;color:var(--text-muted);letter-spacing:.04em}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">Arya Bhangy Builders</div>
+  <ul class="nav-links">
+    <li><a href="#colors">Colors</a></li>
+    <li><a href="#effects">Effects</a></li>
+    <li><a href="#components">Components</a></li>
+    <li><a href="#type">Typography</a></li>
+  </ul>
+</nav>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="eyebrow">Design System &middot; v1.0 &middot; Draft</p>
+    <h1 class="hero-title">Brand System</h1>
+    <p class="hero-sub">Foundational tokens and components for Arya Bhangy Builders Pvt Ltd — a luxury residential developer based in Kochi, Kerala.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <label>Brand Primary</label>
+        <span style="color:var(--crimson-700)">#680000 &mdash; Crimson</span>
+      </div>
+      <div class="hero-meta-item">
+        <label>Accent</label>
+        <span style="color:var(--ink-800)">#1C2438 &mdash; Ink</span>
+      </div>
+      <div class="hero-meta-item">
+        <label>Base Surface</label>
+        <span>#FBFAF7 &mdash; Paper</span>
+      </div>
+      <div class="hero-meta-item">
+        <label>Typography</label>
+        <span style="color:var(--text-muted)">Pending &mdash; Custom fonts</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 01 COLORS -->
+  <section class="section" id="colors">
+    <div class="section-hd">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Color System</h2>
+      <span class="section-desc">Crimson primary &middot; Ink accent &middot; Warm greige neutrals &middot; Status</span>
+    </div>
+
+    <!-- Crimson Primary -->
+    <div class="color-group">
+      <p class="group-label">Crimson Primary</p>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-chip" style="background:#2E0000"></div><div class="swatch-name">Crimson 950</div><div class="swatch-hex">#2E0000</div><div class="swatch-desc">Footer / overlays</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#420000"></div><div class="swatch-name">Crimson 900</div><div class="swatch-hex">#420000</div><div class="swatch-desc">Darker variation</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#560000"></div><div class="swatch-name">Crimson 800</div><div class="swatch-hex">#560000</div><div class="swatch-desc">Dark crimson</div></div>
+        <div class="swatch swatch-star"><div class="swatch-chip" style="background:#680000;outline:2px solid #680000;outline-offset:3px"></div><div class="swatch-name">&#9733; Crimson 700</div><div class="swatch-hex">#680000</div><div class="swatch-desc">Brand primary</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#7C1414"></div><div class="swatch-name">Crimson 600</div><div class="swatch-hex">#7C1414</div><div class="swatch-desc">Hover state</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#962626"></div><div class="swatch-name">Crimson 500</div><div class="swatch-hex">#962626</div><div class="swatch-desc">Lighter accent</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#E7C9C9"></div><div class="swatch-name">Crimson 200</div><div class="swatch-hex">#E7C9C9</div><div class="swatch-desc">Tint borders</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#F2DEDE"></div><div class="swatch-name">Crimson 100</div><div class="swatch-hex">#F2DEDE</div><div class="swatch-desc">Tint surface</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#FAF0F0"></div><div class="swatch-name">Crimson 50</div><div class="swatch-hex">#FAF0F0</div><div class="swatch-desc">Faint wash</div></div>
+      </div>
+    </div>
+
+    <!-- Ink Accent -->
+    <div class="color-group">
+      <p class="group-label">Ink Accent</p>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-chip" style="background:#141A29"></div><div class="swatch-name">Ink 900</div><div class="swatch-hex">#141A29</div><div class="swatch-desc">Deepest</div></div>
+        <div class="swatch swatch-star-ink"><div class="swatch-chip" style="background:#1C2438;outline:2px solid #1C2438;outline-offset:3px"></div><div class="swatch-name">&#9733; Ink 800</div><div class="swatch-hex">#1C2438</div><div class="swatch-desc">Accent</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#283450"></div><div class="swatch-name">Ink 700</div><div class="swatch-hex">#283450</div><div class="swatch-desc">Hover</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#45557A"></div><div class="swatch-name">Ink 500</div><div class="swatch-hex">#45557A</div><div class="swatch-desc">Muted accent</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#E2E6EF"></div><div class="swatch-name">Ink 100</div><div class="swatch-hex">#E2E6EF</div><div class="swatch-desc">Lightest tint</div></div>
+      </div>
+    </div>
+
+    <!-- Neutrals -->
+    <div class="color-group">
+      <p class="group-label">Backgrounds &amp; Surfaces</p>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-chip" style="background:#FBFAF7;border:1px solid #E8E2D8"></div><div class="swatch-name">Paper</div><div class="swatch-hex">#FBFAF7</div><div class="swatch-desc">Page background</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#F3F0EA;border:1px solid #E8E2D8"></div><div class="swatch-name">Paper 2</div><div class="swatch-hex">#F3F0EA</div><div class="swatch-desc">Alt sections</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#FFFFFF;border:1px solid #E8E2D8"></div><div class="swatch-name">Surface</div><div class="swatch-hex">#FFFFFF</div><div class="swatch-desc">Cards / inputs</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#F7F5F1;border:1px solid #E8E2D8"></div><div class="swatch-name">Surface Sunk</div><div class="swatch-hex">#F7F5F1</div><div class="swatch-desc">Inset wells</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#E8E2D8"></div><div class="swatch-name">Border</div><div class="swatch-hex">#E8E2D8</div><div class="swatch-desc">Hairlines</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#D6CEC1"></div><div class="swatch-name">Border Strong</div><div class="swatch-hex">#D6CEC1</div><div class="swatch-desc">Inputs / emphasis</div></div>
+      </div>
+    </div>
+
+    <!-- Text -->
+    <div class="color-group">
+      <p class="group-label">Text</p>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-chip" style="background:#1A1512"></div><div class="swatch-name">Heading</div><div class="swatch-hex">#1A1512</div><div class="swatch-desc">H1–H4</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#4C453E"></div><div class="swatch-name">Body</div><div class="swatch-hex">#4C453E</div><div class="swatch-desc">Paragraphs</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#8A8076"></div><div class="swatch-name">Muted</div><div class="swatch-hex">#8A8076</div><div class="swatch-desc">Captions / meta</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#F6F2EC;border:1px solid #E8E2D8"></div><div class="swatch-name">On Dark</div><div class="swatch-hex">#F6F2EC</div><div class="swatch-desc">On crimson / ink</div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#C9BFB4"></div><div class="swatch-name">On Dark Muted</div><div class="swatch-hex">#C9BFB4</div><div class="swatch-desc">Subtle on dark</div></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- 02 EFFECTS -->
+  <hr class="divider" id="effects">
+  <section class="section">
+    <div class="section-hd">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Effects</h2>
+      <span class="section-desc">Spacing &middot; Radius &middot; Shadows &middot; Motion</span>
+    </div>
+
+    <p class="group-label">Spacing Scale &mdash; 4px base</p>
+    <div class="spacing-list">
+      <div class="spacing-item"><span class="spacing-token">--space-1</span><div class="spacing-bar" style="width:4px"></div><span class="spacing-val">4px</span></div>
+      <div class="spacing-item"><span class="spacing-token">--space-2</span><div class="spacing-bar" style="width:8px"></div><span class="spacing-val">8px</span></div>
+      <div class="spacing-item"><span class="spacing-token">--space-3</span><div class="spacing-bar" style="width:12px"></div><span class="spacing-val">12px</span></div>
+      <div class="spacing-item"><span class="spacing-token">--space-4</span><div class="spacing-bar" style="width:16px"></div><span class="spacing-val">16px</span></div>
+      <div class="spacing-item"><span class="spacing-token">--space-5</span><div class="spacing-bar" style="width:24px"></div><span class="spacing-val">24px</span></div>
+      <div class="spacing-item"><span class="spacing-token">--space-6</span><div class="spacing-bar" style="width:32px"></div><span class="spacing-val">32px</span></div>
+      <div class="spacing-item"><span class="spacing-token">--space-7</span><div class="spacing-bar" style="width:48px"></div><span class="spacing-val">48px</span></div>
+      <div class="spacing-item"><span class="spacing-token">--space-8</span><div class="spacing-bar" style="width:64px"></div><span class="spacing-val">64px</span></div>
+      <div class="spacing-item"><span class="spacing-token">--space-9</span><div class="spacing-bar" style="width:96px"></div><span class="spacing-val">96px</span></div>
+      <div class="spacing-item"><span class="spacing-token">--space-10</span><div class="spacing-bar" style="width:128px"></div><span class="spacing-val">128px</span></div>
+    </div>
+
+    <p class="group-label" style="margin-top:44px">Border Radius &mdash; Sharp &amp; Elegant</p>
+    <div class="radius-row" style="margin-bottom:48px">
+      <div class="radius-item"><div class="radius-box" style="width:56px;height:56px;border-radius:2px"></div><div class="radius-token">--radius-xs</div><div class="radius-val">2px</div></div>
+      <div class="radius-item"><div class="radius-box" style="width:60px;height:60px;border-radius:4px"></div><div class="radius-token">--radius-sm</div><div class="radius-val">4px</div></div>
+      <div class="radius-item"><div class="radius-box" style="width:64px;height:64px;border-radius:6px"></div><div class="radius-token">--radius-md</div><div class="radius-val">6px</div></div>
+      <div class="radius-item"><div class="radius-box" style="width:68px;height:68px;border-radius:10px"></div><div class="radius-token">--radius-lg</div><div class="radius-val">10px</div></div>
+      <div class="radius-item"><div class="radius-box" style="width:68px;height:36px;border-radius:999px"></div><div class="radius-token">--radius-pill</div><div class="radius-val">999px</div></div>
+    </div>
+
+    <p class="group-label">Shadow Elevation &mdash; Soft Warm Tint</p>
+    <div class="shadow-row">
+      <div class="shadow-card" style="box-shadow:0 1px 2px rgba(26,21,18,.05)"><div class="shadow-token">--shadow-xs</div><div class="shadow-use">Subtle lift</div></div>
+      <div class="shadow-card" style="box-shadow:0 2px 6px rgba(26,21,18,.06)"><div class="shadow-token">--shadow-sm</div><div class="shadow-use">Card default</div></div>
+      <div class="shadow-card" style="box-shadow:0 6px 18px rgba(26,21,18,.07)"><div class="shadow-token">--shadow-md</div><div class="shadow-use">Elevated card</div></div>
+      <div class="shadow-card" style="box-shadow:0 16px 40px rgba(26,21,18,.10)"><div class="shadow-token">--shadow-lg</div><div class="shadow-use">Modal / panel</div></div>
+      <div class="shadow-card" style="box-shadow:0 28px 64px rgba(26,21,18,.14)"><div class="shadow-token">--shadow-xl</div><div class="shadow-use">Hero feature</div></div>
+    </div>
+
+    <p class="group-label" style="margin-top:44px">Motion</p>
+    <div class="motion-grid">
+      <div class="motion-card">
+        <div class="motion-label">Duration</div>
+        <div class="mono">--dur-fast &nbsp;140ms<br>--dur-base &nbsp;240ms<br>--dur-slow &nbsp;420ms</div>
+      </div>
+      <div class="motion-card">
+        <div class="motion-label">Easing</div>
+        <div class="mono">--ease-out &nbsp;&nbsp;&nbsp;cubic-bezier(0.22, 0.61, 0.36, 1)<br>--ease-inout &nbsp;cubic-bezier(0.65, 0.05, 0.36, 1)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 COMPONENTS -->
+  <hr class="divider" id="components">
+  <section class="section">
+    <div class="section-hd">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Components</h2>
+      <span class="section-desc">Buttons &middot; Badges &amp; chips</span>
+    </div>
+
+    <div class="component-grid">
+
+      <!-- Buttons -->
+      <div class="component-card">
+        <p class="component-label">Buttons</p>
+        <div class="btn-row">
+          <button class="btn btn-primary">Enquire Now</button>
+          <button class="btn btn-secondary">View Brochure</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost">Learn More</button>
+          <button class="btn btn-outline">View Project</button>
+        </div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+          <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Small variant</div>
+          <div class="btn-row">
+            <button class="btn btn-primary btn-sm">Book Visit</button>
+            <button class="btn btn-ghost btn-sm">Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badges & Chips -->
+      <div class="component-card">
+        <p class="component-label">Badges &amp; Chips</p>
+        <div class="status-grid" style="grid-template-columns:repeat(2,1fr)">
+          <div class="status-card">
+            <div class="status-card-label">Ongoing</div>
+            <span class="badge badge-ongoing"><span class="badge-dot" style="background:var(--status-ongoing-fg)"></span>Ongoing</span>
+            <div class="status-tokens">fg: #8A5A12<br>bg: #F6ECD7<br>bd: #E7D3A8</div>
+          </div>
+          <div class="status-card">
+            <div class="status-card-label">Completed</div>
+            <span class="badge badge-done"><span class="badge-dot" style="background:var(--status-done-fg)"></span>Completed</span>
+            <div class="status-tokens">fg: #2C5E47<br>bg: #E5EFE9<br>bd: #C2DACD</div>
+          </div>
+          <div class="status-card">
+            <div class="status-card-label">Sold Out</div>
+            <span class="badge badge-sold"><span class="badge-dot" style="background:var(--status-sold-fg)"></span>Sold Out</span>
+            <div class="status-tokens">fg: #841414<br>bg: #F2DEDE<br>bd: #E7C9C9</div>
+          </div>
+          <div class="status-card">
+            <div class="status-card-label">Premium</div>
+            <span class="badge badge-premium"><span class="badge-dot" style="background:var(--status-premium-fg)"></span>Premium</span>
+            <div class="status-tokens">fg: #1C2438<br>bg: #E2E6EF<br>bd: #C8CFDD</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 04 TYPOGRAPHY -->
+  <hr class="divider" id="type">
+  <section class="section">
+    <div class="section-hd">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Typography</h2>
+      <span class="section-desc">Kinta (headings) &middot; Jost (body)</span>
+    </div>
+
+    <!-- HEADING + PARA COMBO -->
+    <div class="type-combo">
+      <h2 class="type-combo-heading">Luxury Living, Redefined in Kochi</h2>
+      <p class="type-combo-para">Arya Bhangy Builders brings decades of craftsmanship to every home we build. From thoughtfully designed floor plans to premium finishes, each residence is a reflection of the life lived within it — quiet, considered, and built to last.</p>
+      <div class="type-combo-note">
+        <div class="type-combo-note-item"><strong>Heading</strong>Kinta &mdash; 40px / 400 / lh 1.15</div>
+        <div class="type-combo-note-item"><strong>Body</strong>Jost &mdash; 15px / 400 / lh 1.8</div>
+        <div class="type-combo-note-item"><strong>Note</strong>Kinta.otf must be in the same folder as this file</div>
+      </div>
+    </div>
+
+    <!-- FULL TYPE SCALE -->
+    <p class="group-label" style="margin-bottom:0">Full Type Scale</p>
+
+    <div class="type-scale-row">
+      <div class="type-scale-meta">
+        <div class="type-scale-token">--type-display</div>
+        <div class="type-scale-specs">Kinta &middot; 64px &middot; 400<br>lh 1.05 &middot; Hero sections</div>
+      </div>
+      <div class="type-scale-sample" style="font-family:'Kinta',serif;font-size:64px;font-weight:400;line-height:1.05">Arya Bhangy</div>
+    </div>
+
+    <div class="type-scale-row">
+      <div class="type-scale-meta">
+        <div class="type-scale-token">--type-h1</div>
+        <div class="type-scale-specs">Kinta &middot; 48px &middot; 400<br>lh 1.1 &middot; Page titles</div>
+      </div>
+      <div class="type-scale-sample" style="font-family:'Kinta',serif;font-size:48px;font-weight:400;line-height:1.1">Premium Residences</div>
+    </div>
+
+    <div class="type-scale-row">
+      <div class="type-scale-meta">
+        <div class="type-scale-token">--type-h2</div>
+        <div class="type-scale-specs">Kinta &middot; 40px &middot; 400<br>lh 1.15 &middot; Section headings</div>
+      </div>
+      <div class="type-scale-sample" style="font-family:'Kinta',serif;font-size:40px;font-weight:400;line-height:1.15">Our Projects in Kochi</div>
+    </div>
+
+    <div class="type-scale-row">
+      <div class="type-scale-meta">
+        <div class="type-scale-token">--type-h3</div>
+        <div class="type-scale-specs">Kinta &middot; 30px &middot; 400<br>lh 1.2 &middot; Sub-sections</div>
+      </div>
+      <div class="type-scale-sample" style="font-family:'Kinta',serif;font-size:30px;font-weight:400;line-height:1.2">Centara Residences</div>
+    </div>
+
+    <div class="type-scale-row">
+      <div class="type-scale-meta">
+        <div class="type-scale-token">--type-h4</div>
+        <div class="type-scale-specs">Kinta &middot; 22px &middot; 400<br>lh 1.3 &middot; Card headings</div>
+      </div>
+      <div class="type-scale-sample" style="font-family:'Kinta',serif;font-size:22px;font-weight:400;line-height:1.3">3 BHK Apartments &mdash; Kakkanad</div>
+    </div>
+
+    <div class="type-scale-row">
+      <div class="type-scale-meta">
+        <div class="type-scale-token">--type-body-lg</div>
+        <div class="type-scale-specs">Jost &middot; 18px &middot; 400<br>lh 1.75 &middot; Lead paragraphs</div>
+      </div>
+      <div class="type-scale-sample" style="font-family:'Jost',sans-serif;font-size:18px;font-weight:400;line-height:1.75;max-width:560px">A home is more than a structure. It is where memories are made, families grow, and life unfolds in all its quiet richness.</div>
+    </div>
+
+    <div class="type-scale-row">
+      <div class="type-scale-meta">
+        <div class="type-scale-token">--type-body</div>
+        <div class="type-scale-specs">Jost &middot; 15px &middot; 400<br>lh 1.8 &middot; Body copy</div>
+      </div>
+      <div class="type-scale-sample" style="font-family:'Jost',sans-serif;font-size:15px;font-weight:400;line-height:1.8;max-width:560px">Arya Bhangy Builders brings decades of craftsmanship to every home we build. From thoughtfully designed floor plans to premium finishes, each residence reflects the life lived within it.</div>
+    </div>
+
+    <div class="type-scale-row">
+      <div class="type-scale-meta">
+        <div class="type-scale-token">--type-body-sm</div>
+        <div class="type-scale-specs">Jost &middot; 13px &middot; 400<br>lh 1.7 &middot; Secondary text</div>
+      </div>
+      <div class="type-scale-sample" style="font-family:'Jost',sans-serif;font-size:13px;font-weight:400;line-height:1.7;max-width:480px">Possession expected December 2026. RERA registration number available on request. Contact our sales team for floor plan details and pricing.</div>
+    </div>
+
+    <div class="type-scale-row">
+      <div class="type-scale-meta">
+        <div class="type-scale-token">--type-caption</div>
+        <div class="type-scale-specs">Jost &middot; 11px &middot; 400<br>lh 1.6 &middot; Captions / meta</div>
+      </div>
+      <div class="type-scale-sample" style="font-family:'Jost',sans-serif;font-size:11px;font-weight:400;line-height:1.6;color:var(--text-muted)">Project images are for representational purposes only. Actual finishes may vary from renders shown.</div>
+    </div>
+
+    <div class="type-scale-row">
+      <div class="type-scale-meta">
+        <div class="type-scale-token">--type-label</div>
+        <div class="type-scale-specs">Jost &middot; 10px &middot; 500<br>Uppercase &middot; ls 0.1em &middot; Labels</div>
+      </div>
+      <div class="type-scale-sample" style="font-family:'Jost',sans-serif;font-size:10px;font-weight:500;line-height:1.6;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)">Ongoing &nbsp;&nbsp;&middot;&nbsp;&nbsp; 2 &amp; 3 BHK &nbsp;&nbsp;&middot;&nbsp;&nbsp; Kakkanad, Kochi &nbsp;&nbsp;&middot;&nbsp;&nbsp; Possession Dec 2026</div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span class="footer-brand">Arya Bhangy Builders Pvt Ltd &mdash; Design System</span>
+    <span class="footer-meta">Draft &middot; Colors &middot; Effects &middot; Components &middot; Typography</span>
+  </div>
+
+</main>
+</body>
+</html>
